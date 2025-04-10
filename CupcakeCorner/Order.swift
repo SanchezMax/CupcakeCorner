@@ -29,13 +29,16 @@ class Order: ObservableObject, Codable {
     @Published var extraFrosting = false
     @Published var addSprinkles = false
     
-    @Published var name = ""
-    @Published var streetAddress = ""
-    @Published var city = ""
-    @Published var zip = ""
+    @Published var name: String
+    @Published var streetAddress: String
+    @Published var city: String
+    @Published var zip: String
     
     var hasValidAddress: Bool {
-        if name.isEmpty || streetAddress.isEmpty || city.isEmpty || zip.isEmpty {
+        if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+            streetAddress.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+            city.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+            zip.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return false
         }
         
@@ -62,6 +65,14 @@ class Order: ObservableObject, Codable {
         return cost
     }
     
+    func saveUserAddress() {
+        guard hasValidAddress else { return }
+        UserDefaults.standard.set(name, forKey: "name")
+        UserDefaults.standard.set(streetAddress, forKey: "streetAddress")
+        UserDefaults.standard.set(city, forKey: "city")
+        UserDefaults.standard.set(zip, forKey: "zip")
+    }
+    
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
@@ -77,7 +88,12 @@ class Order: ObservableObject, Codable {
         try container.encode(zip, forKey: .zip)
     }
     
-    init() { }
+    init() {
+        name = UserDefaults.standard.string(forKey: "name") ?? ""
+        streetAddress = UserDefaults.standard.string(forKey: "streetAddress") ?? ""
+        city = UserDefaults.standard.string(forKey: "city") ?? ""
+        zip = UserDefaults.standard.string(forKey: "zip") ?? ""
+    }
     
     required init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

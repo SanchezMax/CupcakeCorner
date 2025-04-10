@@ -22,6 +22,7 @@ struct AddressView: View {
             Section {
                 NavigationLink("Check out") {
                     CheckoutView(order: order)
+                        .onAppear(perform: order.saveUserAddress)
                 }
             }
             .disabled(order.hasValidAddress == false)
