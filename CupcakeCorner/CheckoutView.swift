@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CheckoutView: View {
-    @ObservedObject var order: Order
+    @Bindable var order: Order
     
     @State private var alertTitle = ""
     @State private var alertMessage = ""

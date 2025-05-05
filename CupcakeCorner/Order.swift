@@ -7,18 +7,18 @@
 
 import Foundation
 
-
-class Order: ObservableObject, Codable {
+@Observable
+class Order: Codable {
     enum CodingKeys: CodingKey {
         case type, quantity, extraFrosting, addSprinkles, name, streetAddress, city, zip
     }
     
     static let types = ["Vanilla", "Strawberry", "Chocolate", "Rainbow"]
 
-    @Published var type = 0
-    @Published var quantity = 3
+    var type = 0
+    var quantity = 3
 
-    @Published var specialRequestEnabled = false {
+    var specialRequestEnabled = false {
         didSet {
             if specialRequestEnabled == false {
                 extraFrosting = false
@@ -26,13 +26,13 @@ class Order: ObservableObject, Codable {
             }
         }
     }
-    @Published var extraFrosting = false
-    @Published var addSprinkles = false
+    var extraFrosting = false
+    var addSprinkles = false
     
-    @Published var name: String
-    @Published var streetAddress: String
-    @Published var city: String
-    @Published var zip: String
+    var name: String
+    var streetAddress: String
+    var city: String
+    var zip: String
     
     var hasValidAddress: Bool {
         if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
